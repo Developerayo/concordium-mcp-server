@@ -1,0 +1,35 @@
+{
+  "name": "concordium-mcp-server",
+  "version": "0.0.1",
+  "description": "An MCP server for the Concordium chain",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "concordium",
+    "mcp",
+    "server",
+    "blockchain",
+    "concordium-mcp-server",
+    "concordium",
+    "concordium-mcp",
+    "layer-1"
+  ],
+  "author": "Shodipo Ayomide",
+  "license": "MIT",
+  "packageManager": "pnpm@10.9.0",
+  "dependencies": {
+    "@concordium/common-sdk": "^9.5.3",
+    "@concordium/web-sdk": "^9.2.0",
+    "@grpc/grpc-js": "^1.13.4",
+    "@modelcontextprotocol/sdk": "^1.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.15",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
