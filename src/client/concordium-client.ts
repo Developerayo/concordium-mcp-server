@@ -11,6 +11,7 @@ import {
   Parameter,
   //   ReturnValue,
 } from "@concordium/web-sdk";
+import { CIS2Contract } from "@concordium/web-sdk";
 import type { WalletDetails, BlockDetails } from "./types";
 
 function getNetworkConfig(network: string) {
@@ -127,26 +128,27 @@ export class ConcordiumClient {
     contractAddress: string,
     tokenId: string = ""
   ): Promise<bigint> {
-    const account = AccountAddress.fromBase58(walletAddress);
+    const address = AccountAddress.fromBase58(walletAddress);
     const contract = ContractAddress.create(
       BigInt(contractAddress.split(",")[0]),
       BigInt(contractAddress.split(",")[1] || 0)
     );
 
-    const parameter = Parameter.fromHexString("");
+    try {
+      const cis2Contract = await CIS2Contract.create(this.client, contract);
 
-    const result = await this.client.invokeContract({
-      contract,
-      method: ReceiveName.fromString("CIS2-NFT.balanceOf"),
-      parameter,
-      energy: Energy.create(30000),
-    });
+      const getBalance = {
+        tokenId: tokenId,
+        address: address,
+      };
 
-    if (result.tag === "success" && result.returnValue) {
-      return 0n;
+      // use balanceOf -> web-sdk/lib/esm/cis2/util.js
+      const balance = await cis2Contract.balanceOf(getBalance);
+
+      return balance;
+    } catch (error) {
+      throw new Error(`Issue getting token balance: ${error}`);
     }
-
-    return 0n;
   }
 
   // getValidatorList returns all active validators
