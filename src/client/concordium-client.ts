@@ -198,7 +198,7 @@ export class ConcordiumClient {
   // getBlocksAtHeight returns all block hashes at height
   async getBlocksAtHeight(height: bigint): Promise<Array<string>> {
     const blocks = await this.client.getBlocksAtHeight(height);
-    return blocks.map((hash) => hash.toString());
+    return blocks.map((hash: BlockHash.Type) => hash.toString());
   }
 
   // getInstanceDetails returns a contract instance details
