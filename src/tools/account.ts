@@ -55,14 +55,22 @@ export const accountTools: Array<Tool> = [
     description: "Get all accounts on the chain",
     inputSchema: {
       type: "object",
-      properties: {},
+      properties: {
+        limit: {
+          type: "number",
+          description: "The max number of accounts to return (default: 500)",
+          default: 500,
+        },
+      },
       required: [],
     },
     handler: async (args: any) => {
       try {
+        const limit = args.limit || 500;
         const accounts = [];
         for await (const account of client.getAccountList()) {
           accounts.push(account);
+          if (accounts.length >= limit) break;
         }
         return success(accounts);
       } catch (err: any) {
