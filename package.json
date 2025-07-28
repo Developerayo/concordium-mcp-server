@@ -19,7 +19,18 @@
     "concordium-mcp",
     "layer-1"
   ],
-  "author": "Shodipo Ayomide",
+  "author": {
+    "name": "Shodipo Ayomide",
+    "url": "https://github.com/Developerayo"
+  },
+  "homepage": "https://github.com/Developerayo/concordium-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/Developerayo/concordium-mcp-server/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Developerayo/concordium-mcp-server.git"
+  },
   "license": "MIT",
   "packageManager": "pnpm@10.9.0",
   "dependencies": {
