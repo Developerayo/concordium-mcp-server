@@ -168,6 +168,21 @@ pnpm install
 pnpm run build
 ```
 
+### Using the MCP Inspector for Debugging
+
+The MCP Inspector helps with debugging your MCP server by providing a visual interface to test your methods:
+
+```bash
+pnpm inspector
+```
+
+This will start the MCP Inspector which you can access in your browser. It allows you to:
+
+- See all available methods
+- Test methods with different parameters
+- View the response data
+- Debug issues with your MCP server
+
 ## License
 
 MIT
