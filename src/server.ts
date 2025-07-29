@@ -13,12 +13,17 @@ import { contractTools } from "./tools/contract";
 import { governanceTools } from "./tools/gov";
 import { networkTools } from "./tools/network";
 
+const log = (message: string) =>
+  console.error(
+    `[${new Date().toISOString().split("T")[1].slice(0, 8)}] ${message}`
+  );
+
 interface ToolWithHandler extends Tool {
   handler: (args: any) => Promise<any>;
 }
 
 // tools
-const allTools: ToolWithHandler[] = [
+export const allTools: ToolWithHandler[] = [
   ...accountTools,
   ...blockTools,
   ...tokenTools,
@@ -28,40 +33,76 @@ const allTools: ToolWithHandler[] = [
   ...networkTools,
 ] as ToolWithHandler[];
 
-export const server = new Server(
-  {
-    name: "concordium-mcp-server",
-    version: "0.0.1",
-  },
-  {
-    capabilities: {
-      tools: {},
+const toolsReg = new Map(allTools.map((tool) => [tool.name, tool]));
+
+const config = {
+  network: process.env.CCD_NETWORK || "mainnet",
+};
+
+function createMcpServer() {
+  const server = new Server(
+    {
+      name: "concordium-mcp-server",
+      version: "0.0.1",
     },
-  }
-);
+    {
+      capabilities: {
+        tools: {},
+      },
+    }
+  );
 
-// tools listing
-server.setRequestHandler(ListToolsRequestSchema, async () => {
-  return {
-    tools: allTools.map((tool) => ({
-      name: tool.name,
-      description: tool.description,
-      inputSchema: tool.inputSchema,
-    })),
-  };
-});
+  server.setRequestHandler(ListToolsRequestSchema, async () => {
+    log("MCP: list_tools");
+    return {
+      tools: allTools.map(({ name, description, inputSchema }) => ({
+        name,
+        description,
+        inputSchema,
+      })),
+    };
+  });
 
-// tools calls
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const tool = allTools.find((t) => t.name === request.params.name);
-  if (!tool) {
-    throw new Error(`Tool unavailable: ${request.params.name}`);
-  }
-  return await tool.handler(request.params.arguments);
-});
+  server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    const { name, arguments: args } = request.params;
+    log(`MCP: call_tool - ${name}`);
 
-const transport = new StdioServerTransport();
-server.connect(transport).then(() => {
-  const network = process.env.CCD_NETWORK || "mainnet";
-  console.error(`Concordium mcp-server up (network: ${network})`);
+    const tool = toolsReg.get(name);
+    if (!tool) {
+      log(`Tool not found: ${name}`);
+      throw new Error(`Tool not found: ${name}`);
+    }
+
+    try {
+      const result = await tool.handler(args || {});
+      log(`Tool: ${name} - Success`);
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
+      };
+    } catch (err: any) {
+      log(`Tool: ${name} - Error: ${err.message}`);
+      throw new Error(`Tool execution failed: ${err.message}`);
+    }
+  });
+
+  return server;
+}
+
+const init = async () => {
+  log(`Starting Concordium mcp-server (network: ${config.network})`);
+
+  const server = createMcpServer();
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  log("mcp-server connected");
+};
+
+init().catch((err) => {
+  console.error("Failed to start mcp-server:", err);
+  process.exit(1);
 });

@@ -26,3 +26,7 @@ coverage/
 *.temp
 *.out
 *.log
+api/
+public/
+Dockerfile
+.dockerignore

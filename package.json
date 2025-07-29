@@ -2,7 +2,7 @@
   "name": "concordium-mcp-server",
   "version": "0.0.1",
   "description": "An MCP server for the Concordium chain",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc",
