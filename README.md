@@ -71,7 +71,8 @@ For local dev without Docker:
 **Setup Wizard:**
 
 ```bash
-./scripts/wizard.sh          # Setup wizard for deploy scripts
+# Setup wizard for deploy scripts
+./scripts/wizard.sh
 ```
 
 ### Manual Setup
@@ -90,7 +91,8 @@ node dist/index.js
 #### HTTP
 
 ```bash
-node dist/http-server.js          # Available at http://localhost:3001/sse
+node dist/http-server.js
+# Available at http://localhost:3001/sse
 ```
 
 ## Env
