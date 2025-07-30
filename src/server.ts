@@ -93,16 +93,29 @@ function createMcpServer() {
   return server;
 }
 
-const init = async () => {
-  log(`Starting Concordium mcp-server (network: ${config.network})`);
+async function startServer() {
+  try {
+    log(`Starting Concordium mcp-server (network: ${config.network})`);
+    const server = createMcpServer();
+    return server;
+  } catch (error) {
+    log(`Issue starting mcp-server: ${error}`);
+    process.exit(1);
+  }
+}
 
-  const server = createMcpServer();
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  log("mcp-server connected");
-};
+export default startServer;
 
-init().catch((err) => {
-  console.error("Failed to start mcp-server:", err);
-  process.exit(1);
-});
+if (require.main === module && !process.env.MCP_HTTP_MODE) {
+  const init = async () => {
+    const server = await startServer();
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
+    log("mcp-server connected via stdio");
+  };
+
+  init().catch((err) => {
+    console.error("Failed to start mcp-server:", err);
+    process.exit(1);
+  });
+}

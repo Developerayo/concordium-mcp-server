@@ -7,7 +7,9 @@
     "dev": "tsx src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "inspector": "npx @modelcontextprotocol/inspector node dist/index.js"
+    "inspector": "npx @modelcontextprotocol/inspector node dist/index.js",
+    "inspector:http": "node dist/http-server.js",
+    "test:inspector": "pnpm run build && pnpm run inspector:http"
   },
   "keywords": [
     "concordium",
@@ -37,11 +39,19 @@
     "@concordium/common-sdk": "^9.5.3",
     "@concordium/web-sdk": "^9.2.0",
     "@grpc/grpc-js": "^1.13.4",
-    "@modelcontextprotocol/sdk": "^1.16.0"
+    "@modelcontextprotocol/sdk": "^1.16.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.21",
+    "cors": "^2.8.5",
+    "express": "^4.21.0"
   },
   "devDependencies": {
     "@types/node": "^24.0.15",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "eventsource": "^2.0.2",
+    "node-fetch": "^2.7.0",
+    "@types/eventsource": "^1.1.15",
+    "@types/node-fetch": "^2.6.11"
   }
 }
