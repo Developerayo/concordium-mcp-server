@@ -28,5 +28,4 @@ coverage/
 *.log
 api/
 public/
-Dockerfile
 .dockerignore

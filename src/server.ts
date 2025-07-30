@@ -106,12 +106,12 @@ async function startServer() {
 
 export default startServer;
 
-if (require.main === module) {
+if (require.main === module && !process.env.MCP_HTTP_MODE) {
   const init = async () => {
     const server = await startServer();
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    log("mcp-server connected");
+    log("mcp-server connected via stdio");
   };
 
   init().catch((err) => {

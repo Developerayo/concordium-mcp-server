@@ -9,6 +9,7 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 
 const PORT = 3001;
 const HOST = "0.0.0.0";
+process.env.MCP_HTTP_MODE = "true";
 
 let mcpServer: Server | null = null;
 let activeTransport: SSEServerTransport | null = null;
