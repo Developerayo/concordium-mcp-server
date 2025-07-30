@@ -60,6 +60,20 @@ For local dev without Docker:
 ./scripts/docker-deploy.sh
 ```
 
+**Cloud (HTTP):**
+
+```bash
+./scripts/fly-deploy.sh
+./scripts/railway-deploy.sh
+./scripts/render-deploy.sh
+```
+
+**Setup Wizard:**
+
+```bash
+./scripts/wizard.sh          # Setup wizard for deploy scripts
+```
+
 ### Manual Setup
 
 ```bash
@@ -71,6 +85,12 @@ pnpm run build
 
 # Run
 node dist/index.js
+```
+
+#### HTTP
+
+```bash
+node dist/http-server.js          # Available at http://localhost:3001/sse
 ```
 
 ## Env
