@@ -29,3 +29,6 @@ coverage/
 api/
 public/
 .dockerignore
+
+# Allow template env file for config docs
+!.env.example
